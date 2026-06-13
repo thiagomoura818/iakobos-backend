@@ -4,10 +4,7 @@ import com.iakobos.iakobos.model.dto.VerseText.VerseTextResponse;
 import com.iakobos.iakobos.service.VerseTextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +28,11 @@ public class VerseTextController {
 
         List<VerseTextResponse> verses = verseTextService.findVerseByTBC(translationId, bookId, chapter);
         return ResponseEntity.ok(verses);
+    }
+
+    @GetMapping("/verses/search")
+    public ResponseEntity<List<VerseTextResponse>> searchVerses(@RequestParam Short translationId, @RequestParam String term){
+        List<VerseTextResponse> results = verseTextService.findBySearchTerm(translationId, term);
+        return ResponseEntity.ok(results);
     }
 }
