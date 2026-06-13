@@ -27,4 +27,14 @@ public interface VerseTextRepository extends JpaRepository<VerseText, Long> {
       AND chapter = :chapter
     ORDER BY CAST(verse AS integer) ASC
     """, nativeQuery = true)
-    List<VerseText> findVerseTextByTBC(Short translationId, Short bookId, Integer chapter);}
+    List<VerseText> findVerseTextByTBC(Short translationId, Short bookId, Integer chapter);
+
+    @Query(value= """
+    SELECT id, translation_id, book_id, chapter, verse AS verse_number, text
+    FROM verse_text
+    WHERE translation_id = :translationId
+        AND fts_unaccent(text) @@ plainto_tsquery('portuguese', unaccent(:searchTerm))
+    ORDER BY chapter ASC, CAST(verse as integer) ASC
+    """, nativeQuery = true)
+    List<VerseText> searchVersesByText(Short translationId, String searchTerm);
+}
