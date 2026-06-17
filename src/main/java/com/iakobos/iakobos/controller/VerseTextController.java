@@ -15,18 +15,18 @@ public class VerseTextController {
 
     private final VerseTextService verseTextService;
 
-    @GetMapping("/chapters/translation/{translationId}/book/{bookId}")
-    public ResponseEntity<List<Integer>> findChaptersByBookAndTranslation(@PathVariable Short translationId, @PathVariable Short bookId){
-        return ResponseEntity.ok(verseTextService.findChaptersByBookAndTranslation(translationId, bookId));
+    @GetMapping("/chapters/translation/{translation}/book/{bookId}")
+    public ResponseEntity<List<Integer>> findChaptersByBookAndTranslation(@PathVariable String translation, @PathVariable Short bookId){
+        return ResponseEntity.ok(verseTextService.findChaptersByBookAndTranslation(translation, bookId));
     }
 
-    @GetMapping("/verses/translation/{translationId}/book/{bookId}/chapter/{chapter}")
+    @GetMapping("/verses/translation/{translation}/book/{bookId}/chapter/{chapter}")
     public ResponseEntity<List<VerseTextResponse>> findVerseByTBC(
-            @PathVariable Short translationId,
+            @PathVariable String translation,
             @PathVariable Short bookId,
             @PathVariable Integer chapter) {
 
-        List<VerseTextResponse> verses = verseTextService.findVerseByTBC(translationId, bookId, chapter);
+        List<VerseTextResponse> verses = verseTextService.findVerseByTBC(translation, bookId, chapter);
         return ResponseEntity.ok(verses);
     }
 

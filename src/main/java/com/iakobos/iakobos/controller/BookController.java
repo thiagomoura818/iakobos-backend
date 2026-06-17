@@ -40,5 +40,8 @@ public class BookController {
         return ResponseEntity.ok(bookService.findByTranslationId(id));
     }
 
-
+    @GetMapping("/abbreviation/{abbreviation}")
+    public ResponseEntity<BookResponse> findBookByAbbreviation(@PathVariable String abbreviation){
+        return ResponseEntity.ok(bookService.findBookByAbbreviation(abbreviation));
+    }
 }

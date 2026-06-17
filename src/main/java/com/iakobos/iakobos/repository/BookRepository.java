@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Short> {
     List<Book> findByTestamentId(Short id);
@@ -21,5 +22,6 @@ public interface BookRepository extends JpaRepository<Book, Short> {
 
     // Selecionar os livros de um testamento especifico e com base na traducao
 
+    Optional<Book> findBookByAbbreviation(String abbreviation);
 
 }

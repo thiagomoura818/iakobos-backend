@@ -1,6 +1,7 @@
 package com.iakobos.iakobos.service;
 
 import com.iakobos.iakobos.mapper.TranslationMapper;
+import com.iakobos.iakobos.model.Translation;
 import com.iakobos.iakobos.model.dto.Translation.TranslationResponse;
 import com.iakobos.iakobos.repository.TranslationRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,9 @@ public class TranslationService {
         return TranslationMapper.toResponse(
                 translationRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tradução não encontrada"))
         );
+    }
+
+    protected Translation findByAbbreviation(String abbreviation){
+        return this.translationRepository.findTranslationByAbbreviation(abbreviation).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Traducao nao encontrada"));
     }
 }

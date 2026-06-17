@@ -33,4 +33,10 @@ public class BookService {
         return bookRepository.findBooksByTranslation(id)
                 .stream().map(BookMapper::toResponse).toList();
     }
+
+    public BookResponse findBookByAbbreviation(String abbreviation){
+        System.out.println(abbreviation);
+        return BookMapper.toResponse(bookRepository.findBookByAbbreviation(abbreviation).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+
+    }
 }
