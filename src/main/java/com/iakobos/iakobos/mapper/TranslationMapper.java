@@ -1,14 +1,11 @@
 package com.iakobos.iakobos.mapper;
 
+import com.iakobos.iakobos.dto.TranslationDTO;
 import com.iakobos.iakobos.model.Translation;
-import com.iakobos.iakobos.model.dto.Translation.TranslationResponse;
+import org.mapstruct.Mapper;
 
-public class TranslationMapper {
+@Mapper(componentModel = "spring")
+public interface TranslationMapper {
 
-    public static TranslationResponse toResponse(Translation translation){
-        if(translation == null)
-            return null;
-
-        return new TranslationResponse(translation.getId(), translation.getName(), translation.getLanguage(), translation.getAbbreviation());
-    }
+    TranslationDTO toResponse(Translation translation);
 }

@@ -1,6 +1,6 @@
 package com.iakobos.iakobos.controller;
 
-import com.iakobos.iakobos.model.dto.Testament.TestamentResponse;
+import com.iakobos.iakobos.dto.TestamentDTO;
 import com.iakobos.iakobos.service.TestamentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ public class TestamentController {
     private final TestamentService testamentService;
 
     @GetMapping("")
-    public ResponseEntity<List<TestamentResponse>> findAll(){
-        List<TestamentResponse> responses = testamentService.findAll();
+    public ResponseEntity<List<TestamentDTO>> findAll(){
+        List<TestamentDTO> responses = testamentService.findAll();
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TestamentResponse> findById(@PathVariable Short id){
+    public ResponseEntity<TestamentDTO> findById(@PathVariable Short id){
         return ResponseEntity.ok(testamentService.findById(id));
     }
 }

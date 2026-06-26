@@ -1,6 +1,6 @@
 package com.iakobos.iakobos.model;
 
-public enum UserRole {
+public enum     UserRole {
     ADMIN("ROLE_ADMIN"),
     USER("ROLE_USER");
 

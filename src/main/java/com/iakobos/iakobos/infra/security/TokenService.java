@@ -1,55 +1,53 @@
 package com.iakobos.iakobos.infra.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.iakobos.iakobos.model.User;
-import lombok.RequiredArgsConstructor;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Optional;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 public class TokenService {
 
-    private final SecurityProperties securityProperties;
+    private static final long EXPIRATION_TIME = 86400000;
 
-    public String generateToken(User user) {
-        try{
-            Algorithm algorithm = Algorithm.HMAC256(securityProperties.token().secret());
-            return JWT.create()
-                    .withIssuer(securityProperties.token().issuer())
-                    .withSubject(user.getEmail())
-                    .withClaim("role", user.getRole().name())
-                    .withExpiresAt(genExpirationDate())
-                    .sign(algorithm);
-        }catch(JWTCreationException exception){
-            throw new RuntimeException("Erro ao gerar token JWT", exception);
-        }
+    private final Key secretKey;
+
+    public TokenService(@Value("${api.security.token.secret}") String secret) {
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public Optional<DecodedJWT> validateToken(String token) {
-        try{
-            Algorithm algorithm = Algorithm.HMAC256(securityProperties.token().secret());
-            DecodedJWT jwt = JWT.require(algorithm)
-                    .withIssuer(securityProperties.token().issuer())
-                    .build()
-                    .verify(token);
-            return Optional.of(jwt);
-        }catch (JWTVerificationException exception){
-            return Optional.empty();
-        }
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(secretKey)
+                .compact();
     }
 
-    private Instant genExpirationDate() {
-        var expirationDuration = securityProperties.token().expiration();
-        if (expirationDuration == null) {
-            expirationDuration = java.time.Duration.ofHours(2); // Default fallback: 2 hours
+    public String getUsernameFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(secretKey).build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            log.warn("Token JWT inválido: {}", e.getMessage());
+            return false;
         }
-        return Instant.now().plus(expirationDuration);
     }
 }

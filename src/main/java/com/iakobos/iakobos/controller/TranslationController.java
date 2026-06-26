@@ -1,6 +1,6 @@
 package com.iakobos.iakobos.controller;
 
-import com.iakobos.iakobos.model.dto.Translation.TranslationResponse;
+import com.iakobos.iakobos.dto.TranslationDTO;
 import com.iakobos.iakobos.service.TranslationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +19,13 @@ public class TranslationController {
     private final TranslationService translationService;
 
     @GetMapping("")
-    public ResponseEntity<List<TranslationResponse>> findAll(){
-        List<TranslationResponse> responses = translationService.findAll();
+    public ResponseEntity<List<TranslationDTO>> findAll(){
+        List<TranslationDTO> responses = translationService.findAll();
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TranslationResponse> findById(@PathVariable Short id){
+    public ResponseEntity<TranslationDTO> findById(@PathVariable Short id){
         return ResponseEntity.ok(translationService.findById(id));
     }
 }

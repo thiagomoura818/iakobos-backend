@@ -1,10 +1,10 @@
-package com.iakobos.iakobos.model.dto;
+package com.iakobos.iakobos.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record AuthenticationRequest(
+public record AuthenticationDTO(
         @NotBlank @Email String email,
-        @NotBlank String senha
+        @NotBlank String password
 ) {
 }

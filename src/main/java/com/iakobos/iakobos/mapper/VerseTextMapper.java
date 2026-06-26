@@ -1,14 +1,16 @@
 package com.iakobos.iakobos.mapper;
 
+import com.iakobos.iakobos.dto.VerseTextDTO;
 import com.iakobos.iakobos.model.VerseText;
-import com.iakobos.iakobos.model.dto.VerseText.VerseTextResponse;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class VerseTextMapper {
+@Mapper(componentModel = "spring")
+public interface VerseTextMapper {
 
-    public static VerseTextResponse toResponse(VerseText verseText){
-        if(verseText == null)
-            return null;
-
-        return new VerseTextResponse(verseText.getId(), verseText.getTranslation().getId(),verseText.getBook().getId(),verseText.getChapter(), verseText.getVerse(), verseText.getText());
-    }
+    @Mapping(target="translationId", source = "translation.id")
+    @Mapping(target="bookId", source="verseRef.book.id")
+    @Mapping(target="chapter", source="verseRef.chapter")
+    @Mapping(target="verse", source="verseRef.verse")
+    VerseTextDTO toResponse(VerseText verseText);
 }

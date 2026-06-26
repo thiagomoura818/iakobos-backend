@@ -1,8 +1,7 @@
 package com.iakobos.iakobos.service;
 
 import com.iakobos.iakobos.mapper.TestamentMapper;
-import com.iakobos.iakobos.model.Testament;
-import com.iakobos.iakobos.model.dto.Testament.TestamentResponse;
+import com.iakobos.iakobos.dto.TestamentDTO;
 import com.iakobos.iakobos.repository.TestamentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,12 +15,13 @@ import java.util.List;
 public class TestamentService {
 
     private final TestamentRepository testamentRepository;
+    private final TestamentMapper testamentMapper;
 
-    public List<TestamentResponse> findAll(){
-        return testamentRepository.findAll().stream().map(TestamentMapper::toResponse).toList();
+    public List<TestamentDTO> findAll(){
+        return testamentRepository.findAll().stream().map(testamentMapper::toResponse).toList();
     }
 
-    public TestamentResponse findById(Short id){
-        return TestamentMapper.toResponse(testamentRepository.findById(id)
+    public TestamentDTO findById(Short id){
+        return testamentMapper.toResponse(testamentRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Testamento não encontrado")));    }
 }

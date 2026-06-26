@@ -1,13 +1,11 @@
 package com.iakobos.iakobos.mapper;
 
 import com.iakobos.iakobos.model.Testament;
-import com.iakobos.iakobos.model.dto.Testament.TestamentResponse;
+import com.iakobos.iakobos.dto.TestamentDTO;
+import org.mapstruct.Mapper;
 
-public class TestamentMapper {
-    public static TestamentResponse toResponse(Testament testament){
-        if(testament == null)
-            return null;
+@Mapper(componentModel = "spring")
+public interface TestamentMapper {
 
-        return new TestamentResponse(testament.getId(), testament.getName());
-    }
+    TestamentDTO toResponse(Testament testament);
 }
