@@ -49,6 +49,9 @@ public interface VerseTextRepository extends JpaRepository<VerseText, Long> {
     """, nativeQuery = true)
     List<VerseText> searchVersesByText(Short translationId, String searchTerm);
 
+    @Query("SELECT vt FROM VerseText vt WHERE vt.translation.id = :translationId AND vt.verseRef.id = :verseId")
+    Optional<VerseText> findByTranslationIdAndVerseId(@Param("translationId") Short translationId, @Param("verseId") Long verseId);
+
     /*
     @Query(value = "SELECT v.* FROM verse v " +
             "JOIN chapter c ON v.chapter_id = c.id " +

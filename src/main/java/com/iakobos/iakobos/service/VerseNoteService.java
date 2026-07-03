@@ -87,4 +87,9 @@ public class VerseNoteService {
 
         verseNoteRepository.delete(note);
     }
+
+    public VerseNote getVerseNoteById(Long id){
+        return this.verseNoteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+    }
 }
