@@ -1,4 +1,7 @@
 package com.iakobos.iakobos.dto;
 
-public record LoginDTO(String token) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginDTO(
+        @NotBlank String token) {
 }

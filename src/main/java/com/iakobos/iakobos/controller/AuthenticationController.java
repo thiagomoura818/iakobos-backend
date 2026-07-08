@@ -5,6 +5,7 @@ import com.iakobos.iakobos.model.User;
 import com.iakobos.iakobos.dto.AuthenticationDTO;
 import com.iakobos.iakobos.dto.LoginDTO;
 import com.iakobos.iakobos.dto.RegisterDTO;
+import com.iakobos.iakobos.model.UserRole;
 import com.iakobos.iakobos.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -52,7 +53,7 @@ public class AuthenticationController {
         newUser.setName(data.name());
         newUser.setEmail(data.email());
         newUser.setPassword(encryptedPassword);
-        newUser.setRole(data.role());
+        newUser.setRole(UserRole.USER);
 
         this.repository.save(newUser);
         System.out.println("Salvou o usuario");

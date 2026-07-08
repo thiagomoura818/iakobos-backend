@@ -1,4 +1,10 @@
 package com.iakobos.iakobos.dto;
 
-public record VerseNoteDTO(Long id, String content, Long verseId) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record VerseNoteDTO(
+        @NotNull Long id,
+        @NotBlank String content,
+        @NotNull Long verseId) {
 }

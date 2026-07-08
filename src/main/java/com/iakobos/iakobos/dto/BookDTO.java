@@ -1,4 +1,12 @@
 package com.iakobos.iakobos.dto;
 
-public record BookDTO(Short id, Short testamentId, String name, String abbreviation, Short position) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record BookDTO(
+        @NotNull Short id,
+        @NotNull Short testamentId,
+        @NotBlank String name,
+        @NotBlank String abbreviation,
+        @NotNull Short position) {
 }

@@ -1,4 +1,9 @@
 package com.iakobos.iakobos.dto;
 
-public record TestamentDTO(Short id, String name) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record TestamentDTO(
+        @NotNull Short id,
+        @NotBlank String name) {
 }

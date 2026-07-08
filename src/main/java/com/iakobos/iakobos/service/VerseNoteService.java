@@ -3,6 +3,8 @@ package com.iakobos.iakobos.service;
 import com.iakobos.iakobos.dto.CreateVerseNoteDTO;
 import com.iakobos.iakobos.dto.UpdateVerseNoteDTO;
 import com.iakobos.iakobos.dto.VerseNoteDTO;
+import com.iakobos.iakobos.exceptions.VerseNotFoundException;
+import com.iakobos.iakobos.exceptions.VerseNoteNotFoundException;
 import com.iakobos.iakobos.infra.security.AuthenticationService;
 import com.iakobos.iakobos.mapper.VerseNoteMapper;
 import com.iakobos.iakobos.model.User;
@@ -31,7 +33,7 @@ public class VerseNoteService {
         User user = authenticationService.getAuthenticatedUser();
 
         Verse verse = verseRepository.findById(dto.verseId())
-                .orElseThrow(() -> new RuntimeException("Versículo não encontrado"));
+                .orElseThrow(() -> new VerseNotFoundException(dto.verseId()));
 
         VerseNote newNote = VerseNote.builder()
                 .user(user)
@@ -49,7 +51,7 @@ public class VerseNoteService {
         User user = authenticationService.getAuthenticatedUser();
 
         VerseNote note = verseNoteRepository.findById(dto.id())
-                .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+                .orElseThrow(() -> new VerseNoteNotFoundException(dto.id()));
 
         if (!note.getUser().getId().equals(user.getId()))
             throw new AccessDeniedException("Você não pode editar esta nota.");
@@ -70,7 +72,7 @@ public class VerseNoteService {
                         chapter,
                         verse)
                 .map(verseNoteMapper::toResponse)
-                .orElse(null);
+                .orElseThrow(VerseNoteNotFoundException::new);
     }
 
     @Transactional
@@ -79,10 +81,10 @@ public class VerseNoteService {
         User user = authenticationService.getAuthenticatedUser();
 
         VerseNote note = verseNoteRepository.findById(noteId)
-                .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+                .orElseThrow(() -> new VerseNoteNotFoundException(noteId));
 
         if (!note.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Você não pode excluir esta nota.");
+            throw new AccessDeniedException("Você não pode excluir esta nota.");
         }
 
         verseNoteRepository.delete(note);
@@ -90,6 +92,6 @@ public class VerseNoteService {
 
     public VerseNote getVerseNoteById(Long id){
         return this.verseNoteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+                .orElseThrow(() -> new VerseNoteNotFoundException(id));
     }
 }
