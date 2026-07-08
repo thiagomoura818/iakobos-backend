@@ -10,6 +10,8 @@ import com.iakobos.iakobos.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
@@ -35,14 +38,14 @@ public class AuthenticationController {
                 new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken(((User) auth.getPrincipal()).getEmail());
+        User user = (User) auth.getPrincipal();
+        var token = tokenService.generateToken(user.getEmail(), user.getRole().getRole());
         return ResponseEntity.ok(new LoginDTO(token));
     }
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
-        System.out.println("Entrou na parte de register");
+    public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data) {
         if (this.repository.existsByEmail(data.email())) {
             return ResponseEntity.badRequest().build();
         }
@@ -56,7 +59,7 @@ public class AuthenticationController {
         newUser.setRole(UserRole.USER);
 
         this.repository.save(newUser);
-        System.out.println("Salvou o usuario");
-        return ResponseEntity.ok().build();
+        log.info("Novo usuário registrado: {}", data.email());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

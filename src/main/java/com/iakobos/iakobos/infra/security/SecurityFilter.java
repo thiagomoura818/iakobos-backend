@@ -1,5 +1,6 @@
 package com.iakobos.iakobos.infra.security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,14 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -29,20 +26,22 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        String token = null;
-        String username = null;
 
-        if(authHeader!=null && authHeader.startsWith("Bearer ")){
-            token = authHeader.substring(7);
-            if(tokenService.isTokenValid(token)){
-                username = tokenService.getUsernameFromToken(token);
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            Claims claims = tokenService.parseToken(authHeader.substring(7));
+
+            if (claims != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                String username = claims.getSubject();
+                String role = claims.get("role", String.class);
+
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        }
         filterChain.doFilter(request, response);
     }
 }

@@ -1,5 +1,6 @@
 package com.iakobos.iakobos.infra.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -22,32 +23,30 @@ public class TokenService {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(secretKey)
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
-
-    public boolean isTokenValid(String token) {
+    /**
+     * Valida o token e retorna os claims em uma única operação.
+     * Retorna null se o token for inválido ou expirado.
+     */
+    public Claims parseToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(secretKey).build()
-                    .parseClaimsJws(token);
-            return true;
+            return Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             log.warn("Token JWT inválido: {}", e.getMessage());
-            return false;
+            return null;
         }
     }
 }
