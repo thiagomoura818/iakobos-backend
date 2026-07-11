@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,7 +21,15 @@ public class VerseNoteController {
 
     @PostMapping("")
     public ResponseEntity<VerseNoteDTO> insert(@RequestBody @Valid CreateVerseNoteDTO dto) {
-        return ResponseEntity.ok(verseNoteService.insert(dto));
+        VerseNoteDTO created = verseNoteService.insert(dto);
+
+        URI location = ServletUriComponentsBuilder.
+                fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(verseNoteService.insert(dto));
     }
 
     @PutMapping("")

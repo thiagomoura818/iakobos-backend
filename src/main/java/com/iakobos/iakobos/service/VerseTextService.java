@@ -5,7 +5,9 @@ import com.iakobos.iakobos.mapper.VerseTextMapper;
 import com.iakobos.iakobos.model.Translation;
 import com.iakobos.iakobos.repository.VerseTextRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -29,9 +31,12 @@ public class VerseTextService {
                 .stream().map(verseTextMapper::toResponse).toList();
     }
 
-    public List<VerseTextDTO> findBySearchTerm(Short translationId, String searchTerm){
-        return verseTextRepository.searchVersesByText(translationId, searchTerm)
-                .stream().map(verseTextMapper::toResponse).toList();
+    public Page<VerseTextDTO> findBySearchTerm(
+            Short translationId,
+            String searchTerm,
+            Pageable pageable){
+        return verseTextRepository.searchVersesByText(translationId, searchTerm, pageable)
+                .map(verseTextMapper::toResponse);
     }
 
 }

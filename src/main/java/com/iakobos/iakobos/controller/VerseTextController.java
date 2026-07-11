@@ -1,8 +1,12 @@
 package com.iakobos.iakobos.controller;
 
+import com.iakobos.iakobos.dto.PageResponseDTO;
 import com.iakobos.iakobos.dto.VerseTextDTO;
 import com.iakobos.iakobos.service.VerseTextService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +35,15 @@ public class VerseTextController {
     }
 
     @GetMapping("/verses/search")
-    public ResponseEntity<List<VerseTextDTO>> searchVerses(@RequestParam Short translationId, @RequestParam String term){
-        List<VerseTextDTO> results = verseTextService.findBySearchTerm(translationId, term);
-        return ResponseEntity.ok(results);
+    public ResponseEntity<PageResponseDTO<VerseTextDTO>> searchVerses(
+            @RequestParam Short translationId,
+            @RequestParam String term,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size){
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VerseTextDTO> results = verseTextService.findBySearchTerm(translationId, term, pageable);
+
+        return ResponseEntity.ok(PageResponseDTO.from(results));
     }
 }

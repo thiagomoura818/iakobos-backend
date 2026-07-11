@@ -1,6 +1,8 @@
 package com.iakobos.iakobos.repository;
 
 import com.iakobos.iakobos.model.VerseText;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,8 +48,18 @@ public interface VerseTextRepository extends JpaRepository<VerseText, Long> {
         @@ plainto_tsquery('portuguese', unaccent(:searchTerm))
     ORDER BY v.chapter,
              CAST(v.verse AS integer)
+    """,
+    countQuery = """
+    SELECT count(vt.id)
+    FROM verse_text vt 
+    WHERE vt.translation_id = :translationId
+        AND fts_unaccent(vt.text) @@ plainto_tsquery('portuguese',unaccent(:searchTerm))
     """, nativeQuery = true)
-    List<VerseText> searchVersesByText(Short translationId, String searchTerm);
+    Page<VerseText>
+    searchVersesByText(
+            @Param("translationId") Short translationId,
+            @Param("searchTerm") String searchTerm,
+            Pageable pageable);
 
     @Query("SELECT vt FROM VerseText vt WHERE vt.translation.id = :translationId AND vt.verseRef.id = :verseId")
     Optional<VerseText> findByTranslationIdAndVerseId(@Param("translationId") Short translationId, @Param("verseId") Long verseId);
