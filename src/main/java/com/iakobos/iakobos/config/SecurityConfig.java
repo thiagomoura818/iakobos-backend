@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api-docs/**", "/swagger-ui/**","/swagger-ui.html").permitAll()
                         .requestMatchers("/versenote", "/versenote/**").authenticated()
+                        .requestMatchers("/api/ai/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

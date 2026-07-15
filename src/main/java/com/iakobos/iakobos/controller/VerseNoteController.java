@@ -29,7 +29,7 @@ public class VerseNoteController {
                 .buildAndExpand(created.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(verseNoteService.insert(dto));
+        return ResponseEntity.created(location).body(created);
     }
 
     @PutMapping("")
