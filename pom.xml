@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
+<<<<<<< HEAD
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+=======
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 	https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -9,7 +14,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
 		<version>4.1.0</version>
+=======
+		<version>3.5.3</version>
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 		<relativePath/>
 	</parent>
 
@@ -27,10 +36,20 @@
 
 	<dependencies>
 
+<<<<<<< HEAD
 		<!-- Security -->
-
+=======
+		<!-- Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
+
+		<!-- JPA / Hibernate -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+<<<<<<< HEAD
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
@@ -64,6 +83,8 @@
 		<!-- JPA / Hibernate -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+=======
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
@@ -79,12 +100,15 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
 			<version>2.0.5</version>
 		</dependency>
 
+=======
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -106,6 +130,7 @@
 			<scope>test</scope>
 		</dependency>
 
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -117,6 +142,8 @@
 			<artifactId>spring-ai-starter-model-google-genai</artifactId>
 		</dependency>
 
+=======
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -157,12 +184,15 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
+<<<<<<< HEAD
 
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
 							<version>1.6.3</version>
 						</path>
+=======
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>

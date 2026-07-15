@@ -3,18 +3,25 @@ package com.iakobos.iakobos.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+<<<<<<< HEAD
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+=======
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 
 @Entity
 @Table(name="users")
 @Getter
 @Setter
+<<<<<<< HEAD
 public class User implements UserDetails {
+=======
+public class User {
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +30,7 @@ public class User implements UserDetails {
     @Column(name="name", length = 100, nullable = false)
     private String name;
 
+<<<<<<< HEAD
     @Column(name="email", length=100, nullable = false, unique = true)
     private String email;
 
@@ -42,4 +50,12 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() { return this.email; }
+=======
+    @Column(name="login", length = 100, nullable = false, unique = true)
+    private String login;
+
+    @Column(name="email", length=10, nullable = false, unique = true)
+    private String email;
+
+>>>>>>> f0c0fea6772347fafa627a64ee3e1670ce5099d7
 }
